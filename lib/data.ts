@@ -1,17 +1,51 @@
 import { prisma } from "@/lib/prisma";
-import { auth } from "@/auth";
-import { error } from "console";
 
 export const getAmenities = async () => {
-  const session = await auth();
-  // validasi = jika tidak terdapat session atau jika tidak terdapat user
-  if (!session || !session.user) {
-    throw new Error("Unauthorized acces");
-  }
   try {
     const result = await prisma.amenities.findMany();
     return result;
   } catch (error) {
     console.log(error);
+    return [];
+  }
+};
+
+export const getRooms = async () => {
+  try {
+    const rooms = await prisma.room.findMany({
+      include: {
+        RoomAmenities: {
+          include: {
+            Amenities: true,
+          },
+        },
+      },
+      orderBy: {
+        price: "asc",
+      },
+    });
+    return rooms;
+  } catch (error) {
+    console.log(error);
+    return [];
+  }
+};
+
+export const getRoomById = async (id: string) => {
+  try {
+    const room = await prisma.room.findUnique({
+      where: { id },
+      include: {
+        RoomAmenities: {
+          include: {
+            Amenities: true,
+          },
+        },
+      },
+    });
+    return room;
+  } catch (error) {
+    console.log(error);
+    return null;
   }
 };

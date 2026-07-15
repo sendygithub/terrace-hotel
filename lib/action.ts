@@ -1,16 +1,14 @@
-"use client";
-import { useActionState } from "react";
-import { Prisma } from "@prisma/client";
-import { SiOnstar } from "react-icons/si";
+"use server";
+
+import { prisma } from "@/lib/prisma";
 import { ContactSchema } from "@/lib/zod";
-import { error } from "console";
 
 export const ContactMessage = async (
   prevState: unknown,
-  formData: FormData
+  formData: FormData,
 ) => {
   const validatedFields = ContactSchema.safeParse(
-    Object.fromEntries(formData.entries())
+    Object.fromEntries(formData.entries()),
   );
 
   if (!validatedFields.success) {
@@ -19,7 +17,7 @@ export const ContactMessage = async (
   const { name, email, subject, message } = validatedFields.data;
 
   try {
-    await Prisma.contact.create({
+    await prisma.contact.create({
       data: {
         name,
         email,
@@ -27,8 +25,9 @@ export const ContactMessage = async (
         message,
       },
     });
-    return { message: "terima kasih sudah menggontak kami" };
+    return { message: "terima kasih sudah menghubungi kami" };
   } catch (error) {
     console.log(error);
+    return { error: "Something went wrong" };
   }
 };

@@ -2,14 +2,19 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/auth";
 
-
 declare module "next-auth" {
   interface User {
     role?: string;
   }
 }
 
-const protectedRoutes = ["/myreservations", "/checkout", "/admin"];
+const protectedRoutes = [
+  "/myreservations",
+  "/myreservation",
+  "/checkout",
+  "/payment",
+  "/admin",
+];
 
 export async function middleware(request: NextRequest) {
   const session = await auth();

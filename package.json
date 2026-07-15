@@ -6,17 +6,24 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "seed": "npx tsx prisma/seed.ts"
+  },
+  "prisma": {
+    "seed": "npx tsx prisma/seed.ts"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.10.0",
     "@prisma/client": "^6.14.0",
+    "@vercel/blob": "^2.4.1",
+    "bcryptjs": "^3.0.3",
     "clsx": "^2.1.1",
     "next": "15.4.7",
     "next-auth": "^5.0.0-beta.30",
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "react-icons": "^5.5.0",
+    "react-spinners": "^0.17.0",
     "zod": "^4.0.17"
   },
   "devDependencies": {
@@ -29,6 +36,7 @@
     "eslint-config-next": "15.4.7",
     "prisma": "^6.14.0",
     "tailwindcss": "^4",
+    "tsx": "^4.22.4",
     "typescript": "^5"
   }
 }

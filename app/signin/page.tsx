@@ -1,25 +1,25 @@
-import LoginGoogleButton from '@/components/login-button'
-import React from 'react'
-import { Metadata } from 'next';
+import SignInForm from "./SignInForm";
+import { Metadata } from "next";
 
-export const metadata:Metadata ={
-    title: "sign in",
-
+export const metadata: Metadata = {
+  title: "Sign In",
 };
 
 const SignIn = () => {
   return (
-    <div className='min-h-screen flex items-center'>
-        <div className='bg-white w-96 mx-auto roundes-sm shadow p-8'>
-            <h1 className='text-4xl font-bold mb-1'>Sign In</h1>
-            <p className='font-medium mb-5 text-gray-500'>SignIn To Youre Account</p>
-            <div className='py-4 text-center'>
-            <LoginGoogleButton/>
-            </div>
+    <section className="min-h-screen bg-gray-50 flex items-center justify-center px-4 py-12">
+      <div className="w-full max-w-md -mt-24 bg-white rounded-xl shadow-xl border border-gray-100 p-8">
+        <div className="mb-8 text-center">
+          <h1 className="text-3xl font-bold text-gray-900">Welcome Back</h1>
+          <p className="mt-2 text-sm text-gray-500">
+            Sign in to continue to your account
+          </p>
         </div>
 
-    </div>
-  )
-}
+        <SignInForm />
+      </div>
+    </section>
+  );
+};
 
 export default SignIn;

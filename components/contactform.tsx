@@ -2,15 +2,18 @@
 import clsx from "clsx";
 import { useActionState } from "react";
 import { ContactMessage } from "@/lib/action";
-import { send } from "process";
 
-const contactform = () => {
+const ContactForm = () => {
   const [state, formAction, isPending] = useActionState(ContactMessage, null);
+
+  const error = state?.error;
+  const fieldErrors = error && typeof error === "object" ? error : undefined;
+
   return (
     <div className="bg-white p-8 rounded-lg shadow-sm">
       {state?.message ? (
         <div
-          className="p-4 mb-4 text-sm text-grau-800 rounded-l bg-green-50"
+          className="p-4 mb-4 text-sm text-green-800 rounded-l bg-green-50"
           role="alert"
         >
           <div className="font-medium ">{state.message}</div>
@@ -26,7 +29,9 @@ const contactform = () => {
               placeholder="Name"
             />
             <div aria-live="polite" aria-atomic="true">
-              <p className="text-sm text-red-500 mt-2">{state?.error?.name}</p>
+              <p className="text-sm text-red-500 mt-2">
+                {fieldErrors?.name?.[0]}
+              </p>
             </div>
           </div>
           <div>
@@ -39,7 +44,7 @@ const contactform = () => {
             <div aria-live="polite" aria-atomic="true">
               <p className="text-sm text-red-500 mt-2">
                 {" "}
-                {state?.error?.email}
+                {fieldErrors?.email?.[0]}
               </p>
             </div>
           </div>
@@ -53,7 +58,7 @@ const contactform = () => {
             <div aria-live="polite" aria-atomic="true">
               <p className="text-sm text-red-500 mt-2">
                 {" "}
-                {state?.error?.subject}
+                {fieldErrors?.subject?.[0]}
               </p>
             </div>
           </div>
@@ -68,7 +73,7 @@ const contactform = () => {
             <div aria-live="polite" aria-atomic="true">
               <p className="text-sm text-red-500 mt-2">
                 {" "}
-                {state?.error?.message}
+                {fieldErrors?.message?.[0]}
               </p>
             </div>
           </div>
@@ -77,7 +82,7 @@ const contactform = () => {
           type="submit"
           className={clsx(
             "px-10 py-4 text-center font-semibold text-white w-full bg-orange-400 rounded-sm hover:bg-orange-500 cursor-pointer",
-            { "opacity-50 cursor-progres animate-pulse": isPending }
+            { "opacity-50 cursor-progres animate-pulse": isPending },
           )}
           disabled={isPending}
         >
@@ -88,4 +93,4 @@ const contactform = () => {
   );
 };
 
-export default contactform;
+export default ContactForm;

@@ -9,16 +9,17 @@ datasource db {
 
 
 model Room {
-  id        String   @id @default(cuid())
-  name      String
-  description String @db.Text
-  image     String
-  price     Int
-  capacity Int @default(1)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id          String   @id @default(cuid())
+  name        String
+  type        String   @default("deluxe") // deluxe, premium, suite
+  description String   @db.Text
+  image       String
+  price       Int
+  capacity    Int      @default(1)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
   RoomAmenities RoomAmenities[]
-  Reservations Reservation[]
+  Reservations  Reservation[]
 }
 
 model Amenities {
@@ -30,49 +31,50 @@ model Amenities {
 }
 
 model RoomAmenities {
-  id        String   @id @default(cuid())
-  roomId    String
-  Room       Room    @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  id          String    @id @default(cuid())
+  roomId      String
+  Room        Room      @relation(fields: [roomId], references: [id], onDelete: Cascade)
   amenitiesId String
-  Amenities  Amenities @relation(fields: [amenitiesId], references: [id], onDelete: Cascade)
+  Amenities   Amenities @relation(fields: [amenitiesId], references: [id], onDelete: Cascade)
 }
 
 model Reservation {
   id        String   @id @default(cuid())
   startDate DateTime
   endDate   DateTime
-  price Int
+  price     Int
   userId    String
-  User User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  User      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   roomId    String
-  Room Room @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  Room      Room      @relation(fields: [roomId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  payment Payment?
+  payment   Payment?
 }
-model Payment{
-  id        String   @id @default(cuid())
-  method    String?
-  amount    Int
-  status    String @default("unpaid")
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  reservationId String @unique
-  Reservation Reservation @relation(fields: [reservationId], references: [id], onDelete: Cascade)
+model Payment {
+  id            String    @id @default(cuid())
+  method        String?
+  amount        Int
+  status        String    @default("unpaid")
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  reservationId String    @unique
+  Reservation   Reservation @relation(fields: [reservationId], references: [id], onDelete: Cascade)
 }
 
-model User{
-  id            String          @id @default(cuid())
+model User {
+  id            String    @id @default(cuid())
   name          String?
-  email         String          @unique
+  email         String    @unique
   emailVerified DateTime?
   image         String?
-  role          String          @default("user") // Default role is 'user'
-  phone          String?
-  accounts       account[] // Optional for WebAuthn support
-  Reservations   Reservation[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  password      String?
+  role          String    @default("user")
+  phone         String?
+  accounts      account[]
+  Reservations  Reservation[]
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
 }
  
 model account {
@@ -97,11 +99,11 @@ model account {
 }
 
 model Contact {
-  id String @id @default(cuid())
-  name String
-  email String
-  subject String
-  message String
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  subject   String
+  message   String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }

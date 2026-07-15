@@ -5,7 +5,7 @@ export default function Home() {
   return (
     <div>
       <Hero />
-      <div className="mt-16">
+      <div className="mt-10">
         <div className="text-center">
           <h1 className="text-4xl font-bold uppercase"> Room & Rates</h1>
           <p className="py-3">

@@ -11,12 +11,37 @@ interface Amenity {
   name: string;
 }
 
-const CreateForm = ({ amenities }: { amenities: Amenity[] }) => {
+interface RoomAmenity {
+  id: string;
+  amenitiesId: string;
+  Amenities: Amenity;
+}
+
+interface Room {
+  id: string;
+  name: string;
+  type: string;
+  description: string;
+  image: string;
+  price: number;
+  capacity: number;
+  RoomAmenities: RoomAmenity[];
+}
+
+const EditRoomForm = ({
+  room,
+  amenities,
+}: {
+  room: Room;
+  amenities: Amenity[];
+}) => {
   const inputFileRef = useRef<HTMLInputElement>(null);
-  const [image, setImage] = useState("");
+  const [image, setImage] = useState(room.image);
   const [message, setMessage] = useState("");
   const [pending, startTransition] = useTransition();
   const router = useRouter();
+
+  const selectedAmenityIds = room.RoomAmenities.map((ra) => ra.amenitiesId);
 
   const handleUpload = () => {
     if (!inputFileRef.current?.files) return;
@@ -76,8 +101,8 @@ const CreateForm = ({ amenities }: { amenities: Amenity[] }) => {
 
     startTransition(async () => {
       try {
-        const response = await fetch("/api/rooms", {
-          method: "POST",
+        const response = await fetch(`/api/rooms/${room.id}`, {
+          method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             name,
@@ -95,7 +120,7 @@ const CreateForm = ({ amenities }: { amenities: Amenity[] }) => {
           router.refresh();
         } else {
           const data = await response.json();
-          setMessage(data.error || "Failed to create room");
+          setMessage(data.error || "Failed to update room");
         }
       } catch (error) {
         console.log(error);
@@ -115,6 +140,7 @@ const CreateForm = ({ amenities }: { amenities: Amenity[] }) => {
             <input
               type="text"
               name="name"
+              defaultValue={room.name}
               className="py-2 px-4 rounded-sm border border-gray-400 w-full"
               placeholder="Room name"
               required
@@ -126,6 +152,7 @@ const CreateForm = ({ amenities }: { amenities: Amenity[] }) => {
             </label>
             <select
               name="type"
+              defaultValue={room.type}
               className="py-2 px-4 rounded-sm border border-gray-400 w-full"
             >
               <option value="deluxe">Deluxe</option>
@@ -140,6 +167,7 @@ const CreateForm = ({ amenities }: { amenities: Amenity[] }) => {
             <textarea
               name="description"
               rows={8}
+              defaultValue={room.description}
               className="py-2 px-4 rounded-sm border border-gray-400 w-full"
               placeholder="Description"
               required
@@ -155,6 +183,7 @@ const CreateForm = ({ amenities }: { amenities: Amenity[] }) => {
                   <input
                     type="checkbox"
                     name="amenities"
+                    defaultChecked={selectedAmenityIds.includes(item.id)}
                     defaultValue={item.id}
                     className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded"
                   />
@@ -224,6 +253,7 @@ const CreateForm = ({ amenities }: { amenities: Amenity[] }) => {
             <input
               type="number"
               name="capacity"
+              defaultValue={room.capacity}
               className="py-2 px-4 rounded-sm border border-gray-400 w-full"
               placeholder="Capacity"
               min="1"
@@ -236,6 +266,7 @@ const CreateForm = ({ amenities }: { amenities: Amenity[] }) => {
             <input
               type="number"
               name="price"
+              defaultValue={room.price}
               className="py-2 px-4 rounded-sm border border-gray-400 w-full"
               placeholder="Price"
               min="0"
@@ -248,7 +279,7 @@ const CreateForm = ({ amenities }: { amenities: Amenity[] }) => {
             disabled={pending}
             className="bg-orange-400 text-white w-full hover:bg-orange-500 py-2.5 px-6 text-lg font-semibold cursor-pointer disabled:opacity-50"
           >
-            {pending ? "Saving..." : "Save"}
+            {pending ? "Saving..." : "Update"}
           </button>
         </div>
       </div>
@@ -256,4 +287,4 @@ const CreateForm = ({ amenities }: { amenities: Amenity[] }) => {
   );
 };
 
-export default CreateForm;
+export default EditRoomForm;
