@@ -9,6 +9,8 @@ import {
   IoCashOutline,
   IoCheckmarkCircle,
   IoTimeOutline,
+  IoPrintOutline,
+  IoChevronForward,
 } from "react-icons/io5";
 import Headersection from "@/components/header-section";
 
@@ -228,24 +230,45 @@ const MyReservationPage = () => {
                         </div>
                       </div>
 
-                      <div className="mt-4 pt-4 border-t flex items-center justify-between">
+                      <div className="mt-4 pt-4 border-t flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                         <p className="text-xs text-gray-400">
                           Booked on {formatDate(reservation.createdAt)}
                         </p>
-                        {paymentStatus === "unpaid" && (
+                        <div className="flex items-center gap-2 flex-wrap">
+                          {/* Klik Detail Button - for all reservations */}
                           <Link
-                            href={`/payment/${reservation.id}`}
-                            className="px-4 py-2 bg-orange-400 text-white text-sm font-semibold rounded-sm hover:bg-orange-500 transition duration-150"
+                            href={`/myreservation/${reservation.id}`}
+                            className="inline-flex items-center gap-1 px-4 py-2 border border-gray-300 text-gray-700 text-sm font-semibold rounded-sm hover:bg-gray-50 transition duration-150"
                           >
-                            Pay Now
+                            Klik Detail
+                            <IoChevronForward className="size-3" />
                           </Link>
-                        )}
-                        {paymentStatus === "paid" && (
-                          <div className="flex items-center gap-1 text-green-600 text-sm font-medium">
-                            <IoCheckmarkCircle className="size-4" />
-                            <span>Paid</span>
-                          </div>
-                        )}
+
+                          {paymentStatus === "unpaid" && (
+                            <Link
+                              href={`/payment/${reservation.id}`}
+                              className="px-4 py-2 bg-orange-400 text-white text-sm font-semibold rounded-sm hover:bg-orange-500 transition duration-150"
+                            >
+                              Pay Now
+                            </Link>
+                          )}
+                          {paymentStatus === "paid" && (
+                            <>
+                              <Link
+                                href={`/payment/receipt/${reservation.id}`}
+                                target="_blank"
+                                className="inline-flex items-center gap-1 px-4 py-2 bg-blue-500 text-white text-sm font-semibold rounded-sm hover:bg-blue-600 transition duration-150"
+                              >
+                                <IoPrintOutline className="size-4" />
+                                Cetak Bukti Pembayaran
+                              </Link>
+                              <div className="flex items-center gap-1 text-green-600 text-sm font-medium">
+                                <IoCheckmarkCircle className="size-4" />
+                                <span>Paid</span>
+                              </div>
+                            </>
+                          )}
+                        </div>
                       </div>
                     </div>
                   </div>
